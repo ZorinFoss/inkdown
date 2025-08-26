@@ -1,14 +1,11 @@
-import { remark } from 'remark'
-import remarkParse from 'remark-parse'
+import { fileSave } from 'browser-fs-access'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import { unified } from 'unified'
-import { visit } from 'unist-util-visit'
-import { Node } from 'unist'
-import { fileSave } from 'browser-fs-access'
-import rehypeKatex from 'rehype-katex'
-import rehypeRaw from 'rehype-raw'
+import remarkParse from 'remark-parse'
 import { bundledLanguages, codeToHtml } from 'shiki'
+import { unified } from 'unified'
+import { Node } from 'unist'
+import { visit } from 'unist-util-visit'
 
 // Import required styles from CDN
 const KATEX_CSS = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css'
@@ -601,7 +598,7 @@ const htmlToPdf = (html: string, options: { pageSize: string }): Promise<Blob> =
                 landscape: false
               })
               .then((data: Uint8Array) => {
-                resolve(new Blob([data], { type: 'application/pdf' }))
+                resolve(new Blob([data as BlobPart], { type: 'application/pdf' }))
               })
               .catch(reject)
           } else {

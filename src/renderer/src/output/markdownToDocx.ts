@@ -1,11 +1,11 @@
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, TableRow, TableCell, Table, BorderStyle } from 'docx'
+import { fileSave } from 'browser-fs-access'
+import { BorderStyle, Document, HeadingLevel, Packer, Paragraph, Table, TableCell, TableRow, TextRun } from 'docx'
 import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkParse from 'remark-parse'
-import { visit } from 'unist-util-visit'
 import { Node } from 'unist'
-import { fileSave } from 'browser-fs-access'
+import { visit } from 'unist-util-visit'
 interface MarkdownToDocxOptions {
   filename?: string
   title?: string
@@ -43,7 +43,7 @@ export const markdownToDocx = async (markdown: string, options: MarkdownToDocxOp
 
   // Generate and save docx
   const buffer = await Packer.toBuffer(doc)
-  fileSave(new Blob([buffer]), { fileName: filename })
+  fileSave(new Blob([buffer as BlobPart]), { fileName: filename })
 }
 
 /**
