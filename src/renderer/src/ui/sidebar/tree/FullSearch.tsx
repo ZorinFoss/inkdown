@@ -1,16 +1,17 @@
-import { useGetSetState } from 'react-use'
-import { useCallback, useEffect, useRef } from 'react'
-import { Node } from 'slate'
-import { ReactEditor } from 'slate-react'
-import { SearchOutlined } from '@ant-design/icons'
+import { filterScript } from '@/editor/utils/dom'
 import { useStore } from '@/store/store'
-import { IDoc } from 'types/model'
+import { delayRun } from '@/utils/common'
+import { getOffsetTop } from '@/utils/dom'
+import { SearchOutlined } from '@ant-design/icons'
+import { Tooltip } from '@lobehub/ui'
 import { ArrowLeft, ChevronRight, SquareLibrary } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { getOffsetTop } from '@/utils/dom'
-import { delayRun } from '@/utils/common'
-import { Tooltip } from '@lobehub/ui'
+import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useGetSetState } from 'react-use'
+import { Node } from 'slate'
+import { ReactEditor } from 'slate-react'
+import { IDoc } from 'types/model'
 
 const visitSchema = (schema: any[], cb: (node: any) => void) => {
   for (let c of schema) {
@@ -433,7 +434,7 @@ export const FullSearch = observer(() => {
                         className={
                           'cursor-pointer dark:hover:text-white hover:text-black group break-all ellipsis-10'
                         }
-                        dangerouslySetInnerHTML={{ __html: r.text }}
+                        dangerouslySetInnerHTML={{ __html: filterScript(r.text) }}
                       />
                     ))}
                   </div>

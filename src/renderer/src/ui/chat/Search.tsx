@@ -1,15 +1,15 @@
-import { observer } from 'mobx-react-lite'
-import React, { useCallback, useEffect, useRef } from 'react'
-import isHotkey from 'is-hotkey'
-import { useStore } from '@/store/store'
-import { IChat } from 'types/model'
+import { filterScript } from '@/editor/utils/dom'
 import { useLocalState } from '@/hooks/useLocalState'
-import { ArrowUpDown, Delete, MessageSquareText, X } from 'lucide-react'
 import { IEnter } from '@/icons/keyboard/Enter'
+import { useStore } from '@/store/store'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ScrollList } from '../common/ScrollList'
+import { ArrowUpDown, Delete, MessageSquareText, X } from 'lucide-react'
+import { observer } from 'mobx-react-lite'
+import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { IChat } from 'types/model'
+import { ScrollList } from '../common/ScrollList'
 
 dayjs.extend(relativeTime)
 const hightText = (text: string, keyword: string) => {
@@ -104,7 +104,7 @@ export const ChatSearch = observer(() => {
                 <div>
                   <MessageSquareText size={16} className={'inline mr-1'} />
                   <span
-                    dangerouslySetInnerHTML={{ __html: hightText(r.topic || '', state.keyword) }}
+                    dangerouslySetInnerHTML={{ __html: filterScript(hightText(r.topic || '', state.keyword)) }}
                   />
                 </div>
                 <div className={'dark:text-white/60 text-xs pl-5'}>

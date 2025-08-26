@@ -16,5 +16,23 @@
   },
   "tailwindCSS.lint.cssConflict": "warning",
   "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.classAttributes": ["class", "className"]
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className"
+  ],
+  "cSpell.words": [
+    "alfaaz",
+    "frontmatter",
+    "genai",
+    "hyperscript",
+    "inkdown",
+    "katex",
+    "lancedb",
+    "languagedetector",
+    "lobehub",
+    "mdast",
+    "msgpack",
+    "shiki",
+    "xenova"
+  ]
 }

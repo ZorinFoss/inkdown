@@ -1,35 +1,38 @@
+import { useSubject } from '@/hooks/common'
+import { htmlToMarkdown } from '@/parser/htmlToMarkdown'
+import { TabStore } from '@/store/note/tab'
+import { useStore } from '@/store/store'
+import { ErrorBoundary, ErrorFallback } from '@/ui/common/ErrorBoundary'
+import { delayRun } from '@/utils/common'
+import { observer } from 'mobx-react-lite'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Editable, ReactEditor, Slate } from 'slate-react'
-import { Editor, Element, Node, Range, Transforms } from 'slate'
+import { Descendant, Editor, Element, Node, Range, Transforms } from 'slate'
+import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate } from 'slate-react'
+import { IDoc } from 'types/model'
 import { MElement, MLeaf } from './elements/index'
+import { getPlainTextWithBlockBreaks, markdownToPureHtml } from './parser/worker/toHtml'
 import { useHighlight } from './plugins/useHighlight'
 import { useKeyboard } from './plugins/useKeyboard'
 import { useOnchange } from './plugins/useOnchange'
-import { EditorUtils } from './utils/editorUtils'
 import { Title } from './tools/Title'
-import { useStore } from '@/store/store'
-import { IDoc } from 'types/model'
-import { ErrorFallback, ErrorBoundary } from '@/ui/common/ErrorBoundary'
-import { TabStore } from '@/store/note/tab'
-import { observer } from 'mobx-react-lite'
-import { useSubject } from '@/hooks/common'
-import { htmlToMarkdown } from '@/parser/htmlToMarkdown'
-import { delayRun } from '@/utils/common'
-import { getPlainTextWithBlockBreaks, markdownToPureHtml } from './parser/worker/toHtml'
+import { EditorUtils } from './utils/editorUtils'
 
 export const MEditor = observer(({ tab }: { tab: TabStore }) => {
   const store = useStore()
   const settings = tab.store.settings.state
-  const value = useRef<any[]>([EditorUtils.p])
+  const value = useRef<Descendant[]>([EditorUtils.p as Descendant])
   const high = useHighlight(tab)
   const saveTimer = useRef(0)
   const changeTimer = useRef(0)
   const nodeRef = useRef<IDoc | undefined>(tab.state.doc)
   const renderElement = useCallback(
-    (props: any) => <MElement {...props} children={props.children} />,
+    (props: RenderElementProps) => <MElement {...props} children={props.children} />,
     []
   )
-  const renderLeaf = useCallback((props: any) => <MLeaf {...props} children={props.children} />, [])
+  const renderLeaf = useCallback(
+    (props: RenderLeafProps) => <MLeaf {...props} children={props.children} />,
+    []
+  )
   const keydown = useKeyboard(tab)
   const onChange = useOnchange(tab)
   const first = useRef(true)
@@ -102,7 +105,7 @@ export const MEditor = observer(({ tab }: { tab: TabStore }) => {
   useSubject(tab.saveDoc$, () => {
     save()
   })
-  const reset = useCallback((data: any[] | null, ipc = false) => {
+  const reset = useCallback((data: Descendant[] | null, ipc = false) => {
     if (data && nodeRef.current) {
       tab.editor.selection = null
       tab.setState((state) => {
@@ -123,7 +126,7 @@ export const MEditor = observer(({ tab }: { tab: TabStore }) => {
     }
   })
   const change = useCallback(
-    (v: any[]) => {
+    (v: Descendant[]) => {
       if (first.current) {
         setTimeout(() => {
           first.current = false
