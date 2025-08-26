@@ -113,7 +113,7 @@ const Markdown = memo<MarkdownProps>(
         onDoubleClick={onDoubleClick}
         style={style}
       >
-        <ReactMarkdown
+        <div
           className={cx(
             mdStyles.__root,
             mdStyles.a,
@@ -133,13 +133,16 @@ const Markdown = memo<MarkdownProps>(
             enableLatex && styles.latex,
             isChatMode && styles.chat
           )}
-          components={memoComponents}
-          rehypePlugins={memoRehypePlugins}
-          remarkPlugins={memoRemarkPlugins}
-          {...rest}
         >
-          {children}
-        </ReactMarkdown>
+          <ReactMarkdown
+            components={memoComponents}
+            rehypePlugins={memoRehypePlugins}
+            remarkPlugins={memoRemarkPlugins}
+            {...rest}
+          >
+            {children}
+          </ReactMarkdown>
+        </div>
       </div>
     )
   }
